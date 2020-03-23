@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import requests
 
 backend_url = 'https://post-route-feature.herokuapp.com/api/posts/:id'
 
@@ -12,7 +13,7 @@ def create_app():
         baseline_time = jsonify({
       "optimal_time": "1PM"
 })
-        # request.put(url=backend_url, data=baseline_time)
-        return baseline_time
+        r = requests.put(backend_url, data=baseline_time)
+        return r
 
     return app
