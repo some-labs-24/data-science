@@ -1,7 +1,7 @@
 import requests
 from flask import Flask, request, jsonify
 
-backend_url = 'https://post-route-feature.herokuapp.com/api/posts/:id'
+backend_url = 'https://post-route-feature.herokuapp.com/api/posts/1'
 
 def create_app():
     app = Flask(__name__)
