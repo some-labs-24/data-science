@@ -6,7 +6,7 @@ def create_app():
     app = Flask(__name__)
     
 
-    @app.route('/recommend', methods=['POST'])
+    @app.route('/recommend', methods=['POST', 'GET'])
     def recommended():
 
         baseline_time = jsonify({
