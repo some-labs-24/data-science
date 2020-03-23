@@ -10,9 +10,9 @@ def create_app():
     @app.route('/recommend', methods=['POST'])
     def recommended():
 
-        baseline_time = jsonify({"optimal_time": "1PM"})
+        baseline_time = {"optimal_time": "1PM"}
 
         r = requests.put(backend_url, data=baseline_time)
-        return baseline_time
+        return jsonify(baseline_time)
 
     return app
