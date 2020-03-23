@@ -6,8 +6,8 @@ def create_app():
 
     
 
-    @app.route('/recommand',methods=['GET'])
-    def recommanded():
+    @app.route('/recommend',methods=['GET'])
+    def recommended():
 
         return jsonify({
       "recommended_time": "1PM"
