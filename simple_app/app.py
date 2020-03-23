@@ -11,8 +11,8 @@ def create_app():
     def recommended():
 
         baseline_time = jsonify({"optimal_time": "1PM"})
-        
+
         r = requests.put(backend_url, data=baseline_time)
-        return "worked"
+        return baseline_time
 
     return app
