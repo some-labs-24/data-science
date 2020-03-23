@@ -12,7 +12,7 @@ def create_app():
         baseline_time = jsonify({
       "optimal_time": "1PM"
 })
-
-        return request.put(url=backend_url, data=baseline_time)
+        # request.put(url=backend_url, data=baseline_time)
+        return baseline_time
 
     return app
