@@ -2,7 +2,7 @@ import requests
 import json
 
 url = 'http://localhost:5000/recommend'
-url = 'https://gt-wordcount-pro.herokuapp.com/protected'
+url = 'https://gt-wordcount-pro.herokuapp.com/recommend'
 
 
 payload = {"id" : 1}
