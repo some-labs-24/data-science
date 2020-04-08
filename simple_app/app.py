@@ -37,7 +37,7 @@ def create_app():
     app = Flask(__name__)
 
     @app.route('/recommend', methods=['POST'])
-    @token_required
+    # @token_required
 
     def recommended():
         user_input = request.get_json()
@@ -46,7 +46,7 @@ def create_app():
         backend_url = 'https://social-media-strategy.herokuapp.com/api/posts/' + f'{id}'
 
         # header_data = {'Authorization' : token_expected_by_backend}
-        header_data = {'Authorization' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijo2LCJlbWFpbCI6ImRzMTBAbGFzZXJzaGFya3MuY29tIiwib2t0YV91c2VyaWQiOiJEUyBoYXZlIG5vIE9rdGEiLCJpYXQiOjE1ODYzNzg0OTgsImV4cCI6MTU4ODk3MDQ5OH0.MH8RkfEYcbpzIFchet4BZZJe74MhJjIQ5ZbYhsryAbw'}
+        header_data = {'Authorization' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijo2LCJlbWFpbCI6ImRzMTBAbGFzZXJzaGFya3MuY29tIiwib2t0YV91c2VyaWQiOiJEUyBoYXZlIG5vIE9rdGEiLCJpYXQiOjE1ODYzNzg0OTgsImV4cCI6MTU4ODk3MDQ5OH0.MH8RkfEYcbpzIFchet4BZZJe74MhJjIQ5ZbYhsryAbw}
 
         baseline_time = {"optimal_time": "1PM"}
 
