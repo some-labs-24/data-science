@@ -10,7 +10,6 @@ flask = "*"
 flask-sqlalchemy = "*"
 tweepy = "*"
 gunicorn = "*"
-pyjwt = "*"
 
 [requires]
 python_version = "3.7"
