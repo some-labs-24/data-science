@@ -6,10 +6,13 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-flask = "*"
-flask-sqlalchemy = "*"
+requests = "*"
+basilica = "*"
 tweepy = "*"
-gunicorn = "*"
+python-dotenv = "*"
+Flask = "*"
+Flask-SQLAlchemy = "*"
+Flask-Migrate = "*"
 
 [requires]
 python_version = "3.7"
