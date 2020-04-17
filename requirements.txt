@@ -1,7 +1,1 @@
-flask 
-flask-sqlalchemy 
-flask-migrate 
-requests 
-basilica 
-tweepy 
-python-dotenv
+-r flask_app/requirements.txt

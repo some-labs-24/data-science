@@ -1,5 +1,9 @@
 .env
 .ipynb_checkpoints
 .vscode/
+__pycache__
+*.pyc
+*.log
+.DS_Store
 
 settings.json
