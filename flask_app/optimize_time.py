@@ -75,7 +75,7 @@ class data_wrangling:
                 pass
 
         # seperates hours, mins, secs into lists to be put into a df
-        hours, mins = [int(i[11:13]) for i in times], [int(i[14:16]) for i in times]
+        hours, mins = [i[11:13] for i in times], [int(i[14:16]) for i in times]
         
         _min_bin = data_wrangling.min_bin(mins)
          
