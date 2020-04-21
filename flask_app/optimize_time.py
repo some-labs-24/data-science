@@ -2,6 +2,9 @@ import json
 import os
 import tweepy
 
+from datetime import date
+import calendar
+
 import pandas as pd
 from dotenv import load_dotenv
 
@@ -27,6 +30,12 @@ class data_wrangling:
         self.user_id = user_id
         self.follower_count = follower_count
 
+    def todays_date():
+        today = date.today()
+        day = today.strftime("%b-%d-%Y").replace('-', ' ')
+        my_date = date.today()
+        return calendar.day_name[my_date.weekday()][:3] + ' ' + day
+    
     def min_bin (mins):
         l = []
         for _min in mins:
@@ -74,7 +83,6 @@ class data_wrangling:
 
                 pass
 
-        # seperates hours, mins, secs into lists to be put into a df
         hours, mins = [i[11:13] for i in times], [int(i[14:16]) for i in times]
         
         _min_bin = data_wrangling.min_bin(mins)
@@ -87,4 +95,8 @@ class data_wrangling:
         return df
     
     def optimal_time(self, df):
-        return df['time'].value_counts().idxmax()
+        today = date.today()
+        day = today.strftime("%b-%d-%Y").replace('-', ' ')
+        day_and_date = calendar.day_name[today.weekday()][:3] + ' ' + day
+        optimal_time = df['time'].value_counts().idxmax()
+        return day_and_date + ' ' + optimal_time + ':00 UTC+0000'

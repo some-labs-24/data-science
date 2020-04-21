@@ -1,8 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .optimize_time import data_wrangling   # Look into relative imports
 
-import datetime
-import logging
 import requests 
 import os
 from dotenv import load_dotenv
