@@ -16,7 +16,7 @@ def recommendation():
     _id = user_input['id']
     twitter_handle = user_input['screenname']
 
-    backend_url = 'https://social-media-strategy.herokuapp.com/api/posts/' + str(_id)
+    backend_url = 'https://api.so-me.net/api/posts/' + str(_id)
     header_data = {'Authorization' : BACKEND_AUTHORIZATION}
 
     dw = data_wrangling(twitter_handle, 5)
