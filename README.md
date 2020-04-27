@@ -1,94 +1,62 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
+# So-Me
 
-🚫 The numbers 1️⃣ through 5️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
+You can find the project at [https://www.so-me.net/](https://www.so-me.net/login).
 
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
-# 1️⃣ Title of project goes here
-
-You can find the project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
-
-## 5️⃣ Contributors
-
-🚫Add contributor info below, make sure add images and edit the social links for each member. Add to or delete these place-holders as needed
-
-|                                       [Student 1](https://github.com/)                                        |                                       [Student 2](https://github.com/)                                        |                                       [Student 3](https://github.com/)                                        |                                       [Student 4](https://github.com/)                                        |                                       [Student 5](https://github.com/)                                        |
-| :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
-|                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/)                       |
-|                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/honda0306)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)             |
-| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) |
-
-
-
-🚫 5️⃣ Optional examples of using images with links for your tech stack, make sure to change these to fit your project
-
-![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
-![Typescript](https://img.shields.io/npm/types/typescript.svg?style=flat)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b5c4db1c-b10d-42c3-b157-3746edd9e81d/deploy-status)](netlify link goes in these parenthesis)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
-🚫 more info on using badges [here](https://github.com/badges/shields)
+## Contributors
+|                                       [Andrew Lowe](https://github.com/AndrewSLowe)                                        |                                       [Sarah Xu](https://github.com/sarahxu087)                                        |                                       [Jud Taylor](https://github.com/gptix)                                        |
+| :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
+|                      [<img src="https://avatars2.githubusercontent.com/u/54857972?s=460&u=521c79c3b34a1742ca8c1e6d97f530622f5c24cd&v=4" width = "200" />](https://github.com/)                       |                      [<img src="https://ca.slack-edge.com/T4JUEB3ME-UNTKB89HQ-5ce141a9cadf-512" width = "200" />](https://github.com/)                       |                      [<img src="https://avatars3.githubusercontent.com/u/21339224?s=400&v=4" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/)                       |                      [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/AndrewSLowe)                       |
+|                 [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/AndrewSLowe)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/sarahxu087)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/gptix)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)           |            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)             |
+| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/andrew-lowe-5b581714a/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/sarahx/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/) |
 
 ## Project Overview
 
+[Trello Board](https://trello.com/b/tn4nvK97/labs-22-social-media-strategy)
 
-1️⃣ [Trello Board](🚫add link to trello board here)
+[Product Canvas](https://www.notion.so/Social-Media-Strategy-9d1840703db34c5cb44d0f4a0cc45543)
 
-1️⃣ [Product Canvas](🚫add link to product canvas here)
+So-Me is a social media management tool for small businesses. Users of So-Me will be able to post to any of their company's major social media platforms (LinkedIn, Instagram, Facebook, Twitter) from the app, supported by a simple to use drag and drop design. Our app will give user's time recommendation's for posting and feedback on their proposed post using their follower's engagement data.
 
-🚫 Replace lorem ipsum with a description of your project
+In it's current state, the app only supports Twitter. However, the user still gets benefit from using our app rather than posting directly on Twitter. We give the user a personalized time recommendation based on their follower's engagement data, and will soon give feedback on their text with their follower's data as well.  
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-🚫  delete if front end is not applicable to your project
-
-1️⃣ [Deployed Front End](🚫add link to deployed app here)
+[Deployed Front End](https://www.so-me.net/)
 
 ### Tech Stack
 
-🚫 List all of the languages, frameworks, services, etc used here.
+Languages: Python
 
-### 2️⃣ Predictions
+Frameworks: FlaskAPI
 
-🚫 Describe your models here
+Services: Heroku, Jupyter Notebooks, Postman
 
-### 2️⃣ Explanatory Variables
+### Predictions
 
--   Explanatory Variable 1
--   Explanatory Variable 2
--   Explanatory Variable 3
--   Explanatory Variable 4
--   Explanatory Variable 5
+We have workshopped several models that will give our user's feedback (not yet built into the model). Utilizing a predictive model, we can predict the number of retweets, likes and comments a post will get; using topic modeling, we can see groupings of terms their followers typically engage with; and using sentiment analysis, we can predict the attitudes of texts their followers engage with.
+
+### Explanatory Variables
+
+-   The time followers engage with posts
+-   The content of the posts the with which followers engage
 
 ### Data Sources
-🚫  Add to or delete souce links as needed for your project
 
-
--   [Source 1] (🚫add link to python notebook here)
--   [Source 2] (🚫add link to python notebook here)
--   [Source 3] (🚫add link to python notebook here)
--   [Source 4] (🚫add link to python notebook here)
--   [Source 5] (🚫add link to python notebook here)
+-   [Time and text - Twitter] (https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/data_wrangling_time_and_content.ipynb)
 
 ### Python Notebooks
 
-🚫  Add to or delete python notebook links as needed for your project
+[Data Wrangling class](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/data_wrangling_time_and_content.ipynb)
 
-[Python Notebook 1](🚫add link to python notebook here)
+[Topic Modeling - user's tweets](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/post_analytics.ipynb)
 
-[Python Notebook 2](🚫add link to python notebook here)
+[Topic Modeling - follower's tweets](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/followe_data_analytics.ipynb)
 
-[Python Notebook 3](🚫add link to python notebook here)
+### How to connect to the web API
 
-### 3️⃣ How to connect to the web API
+Connection to the web API is built into the flask_app/routes.py file. The backend makes a POST request to our flask app with the user's twitter handle and we return a PUT request with the optimal time for posting. The connection is possible with the backend token (stored in a hidden file) that can be received by sending a specific password and username to the backend URL with a GET request.
 
-🚫 List directions on how to connect to the API here
+### How to connect to the data API
 
-### 3️⃣ How to connect to the data API
-
-🚫 List directions on how to connect to the API here
+The only data API we have built into the app at this point is the Twitter Developer API. We accessed this with http requests, using our unique tokens for authentification.
 
 ## Contributing
 

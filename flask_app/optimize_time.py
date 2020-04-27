@@ -83,6 +83,10 @@ class data_wrangling:
 
                 pass
 
+<<<<<<< HEAD
+        # seperates hours, mins into lists to be put into a df (leave hours as str to keep in military time for put request to backend)
+=======
+>>>>>>> cf9a463bea3583d66b1f4d0dda78dc25e44ae934
         hours, mins = [i[11:13] for i in times], [int(i[14:16]) for i in times]
         
         _min_bin = data_wrangling.min_bin(mins)
@@ -99,4 +103,8 @@ class data_wrangling:
         day = today.strftime("%b-%d-%Y").replace('-', ' ')
         day_and_date = calendar.day_name[today.weekday()][:3] + ' ' + day
         optimal_time = df['time'].value_counts().idxmax()
+<<<<<<< HEAD
         return day_and_date + ' ' + optimal_time + ':00 UTC+0000'
+=======
+        return day_and_date + ' ' + optimal_time + ':00 UTC+0000'
+>>>>>>> cf9a463bea3583d66b1f4d0dda78dc25e44ae934

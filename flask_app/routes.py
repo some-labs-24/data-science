@@ -20,8 +20,8 @@ def recommendation():
     header_data = {'Authorization' : BACKEND_AUTHORIZATION}
 
     dw = data_wrangling(twitter_handle, 5)
-    fi = dw.followers_ids()
-    get_follower_data = dw.get_follower_data(fi)
+    followers_ids = dw.followers_ids()
+    get_follower_data = dw.get_follower_data(followers_ids)
     optimal_time = dw.optimal_time(get_follower_data)
 
     baseline_time = {"optimal_time": optimal_time}
