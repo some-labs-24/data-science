@@ -9,8 +9,6 @@ verify_ssl = true
 fastapi = "*"
 uvicorn = "*"
 gunicorn = "*"
-tweepy = "*"
-pandas = "*"
 
 [requires]
 python_version = "3.7"
