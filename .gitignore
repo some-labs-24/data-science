@@ -7,3 +7,8 @@ __pycache__
 .DS_Store
 
 settings.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
