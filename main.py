@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel
 
-# from flask_app.optimize_time import data_wrangling
+from components.optimize_time import data_wrangling
 
 import json
 
@@ -43,12 +43,12 @@ async def recommend(user_input: TwitterIDAndHandleInput):
     twitter_handle = request_dict['twitter_handle']
     user_id = request_dict['user_id']
 
-    # dw = data_wrangling(twitter_handle, 5)
-    # followers_ids = dw.followers_ids()
-    # get_follower_data = dw.get_follower_data(followers_ids)
-    # optimal_time = dw.optimal_time(get_follower_data)
+    dw = data_wrangling(twitter_handle, 5)
+    followers_ids = dw.followers_ids()
+    get_follower_data = dw.get_follower_data(followers_ids)
+    optimal_time = dw.optimal_time(get_follower_data)
 
-    optimal_time = "Tue May 26 2020 17:00:00 UTC+0000"
+    # optimal_time = "Tue May 26 2020 17:00:00 UTC+0000"
 
     baseline_time = {"optimal_time": optimal_time}
 
