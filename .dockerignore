@@ -5,3 +5,7 @@
 .git
 
 .gitignore
+
+.env
+
+.python_notebooks/*
