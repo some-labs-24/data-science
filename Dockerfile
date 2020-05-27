@@ -4,4 +4,4 @@ RUN pip install tweepy pandas python-dotenv emoji spacy
 
 COPY ./app /app
 
-EXPOSE 5000
+EXPOSE 80
