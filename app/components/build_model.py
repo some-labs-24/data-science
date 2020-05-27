@@ -97,16 +97,11 @@ def build_model(twitter_handle, num_followers_to_scan):
         tokens = re.sub('[%s]' % re.escape(string.punctuation), '', text) # Remove punctuation
         tokens = re.sub('\w*\d\w*', '', text) # Remove words containing numbers
         tokens = re.sub('@*!*\$*', '', text) # Remove @ ! $
-        #tokens = re.sub('@', '', text) # Remove @
-        #tokens = re.sub('$', '', text) # Remove $
-        #tokens = re.sub('\$*', '', text) # Remove $
         tokens = tokens.strip(',') # TESTING THIS LINE
         tokens = tokens.strip('?') # TESTING THIS LINE
         tokens = tokens.strip('!') # TESTING THIS LINE
         tokens = tokens.strip("'") # TESTING THIS LINE
         tokens = tokens.strip(".") # TESTING THIS LINE
-        #tokens = tokens.strip("$") # TESTING THIS LINE
-        #tokens = tokens.strip("@") # TESTING THIS LINE
 
         tokens = tokens.lower().split() # Make text lowercase and split it
         
@@ -115,10 +110,28 @@ def build_model(twitter_handle, num_followers_to_scan):
     # Apply tokenizer
     df['lemma_tokens'] = df['lemmas_back_to_text'].apply(tokenize)
 
+    # Create a id2word dictionary
+    id2word = Dictionary(df['lemma_tokens'])
+    # Filtering Extremes
+    id2word.filter_extremes(no_below=2, no_above=.99)
+    # Creating a corpus object 
+    corpus = [id2word.doc2bow(d) for d in df['lemma_tokens']]
+    # Instantiating a LDA model 
+    model = LdaMulticore(corpus=corpus, num_topics=5, id2word=id2word, workers=12, passes=5)
+    # Filtering for words 
+    words = [re.findall(r'"([^"]*)"',t[1]) for t in model.print_topics()]
+    # Create Topics
+    topics = [' '.join(t[0:10]) for t in words]
+    
+    topics_list = []
 
+    for id, t in enumerate(topics): 
+        topics_list.append(t)
 
-    print(df['lemma_tokens'])
+    dictOfWords = { i : topics_list[i] for i in range(0, len(topics_list) ) }
+    
+    print(dictOfWords)
 
 
 if __name__ == "__main__":
-    build_model('lawrence_kimsey', 5)
+    build_model('DutchBros', 5)
