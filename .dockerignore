@@ -6,6 +6,4 @@
 
 .gitignore
 
-.env
-
 .python_notebooks/*
