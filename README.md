@@ -1,4 +1,4 @@
-# SoMe
+# SoMe - Social Media Management Platform
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
 You can find the project at [SoMe](https://www.so-me.net/)
@@ -74,79 +74,39 @@ Auxiliary Services:
 
 ###  Models:
 
-#### Digit Recognition
-##### Using an XGBClassifier model, we a weighted have Digit recognition at +95% precision and recall across all classes, trained on over 100,000 images (combination of manually scrapped and MNIST), and a validation dataset of over 25,000 digits. Here is an output of our most recent classification report and validation score: (0.0 represents blank/noise cells that are not any single number)
+#### Topic Modeling
+##### Topic Modeling is a technique to extract the hidden topics from large volumes of text.Our team used an Latent Dirichlet Allocation (LDA) model from Gensim Python package to generate the most important words drawing engagement from user followers. One of our main challenges was how to extract good quality of topics that are clear, segregated and meaningful. This depends heavily on the quality of text preprocessing and the strategy of finding the optimal number of topics. To improve the quality of the text we recieved from the Twitter API we used various techniques such as extensive data wrangling by cleaning tweets from emojies and html marks, combining Spacy, Gensim and Wordcloud stop word libraries into one library, add our custom stop words and lemmitizing all the text. After generating topics we used pyLDAvis package to visualize all the topics, computed coherence scores and then worked through getting to optimal number of topics. 
 
-```
-Validation Accuracy 0.9552200984651028
+### Explanatory Variables:
 
-starting validation test
-              precision    recall  f1-score   support
-
-         0.0       0.99      0.98      0.99      1624
-         1.0       0.95      0.99      0.97      2936
-         2.0       0.96      0.96      0.96      3010
-         3.0       0.95      0.94      0.95      2958
-         4.0       0.94      0.96      0.95      2787
-         5.0       0.95      0.94      0.95      2680
-         6.0       0.97      0.98      0.98      2894
-         7.0       0.97      0.95      0.96      3026
-         8.0       0.95      0.93      0.94      2802
-         9.0       0.93      0.93      0.93      2907
-
-   micro avg       0.96      0.96      0.96     27624
-   macro avg       0.96      0.96      0.96     27624
-weighted avg       0.96      0.96      0.96     27624
-
-```
-
-
-##### Image Processing Pipeline
-Here is an example of the intermediary steps for taking a raw image and formatting it in such a way for digit recognition.
-
-Original Photo:
-
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/raw_puzzle.png" width = "300" />](https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/raw_puzzle.png)  
-
-Processed Image:
-
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/processed_puzzle.png" width = "300" />](https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/processed_puzzle.png)  
-
-Cell Splicing:
-
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/sudoku_cell.png" width = "300" />](https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/sudoku_cell.png)  
-
-Each Cell is then casted into a Numpy Array (each cell is 28x28 pixels, reshaped to a Numpy vector with length 784) and then fed into the Model.
-
-Predicted Sudoku Grid and Solution Grid.
-
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/display_grid.png" width = "300" />](https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/display_grid.png)  
-
-
-**Note: For the modeling, the "blank" classifier is a `0`, but for the front end it is a `.` .**
-
-#### Sudoku Puzzle Difficulty Model:
-
-##### To predict the difficulty level of a Sudoku we used a Logistic Regression, by counting the number of times different techniques are used to solve a given puzzle, we can forecast an accurate difficulty tracking at above 70%.
+* The time followers engage with posts
+* Follower Engagement data
+* Tweets Followers engaged with the most
 
 
 ### Data Sources
 
+-   [Time and text - Twitter API](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/app/main.py)
 
--   [Reference Sudoku Puzzles Scraped](http://www.sudoku.org.uk/Daily.asp)
--   [Paper Sudoku Puzzles Processed](https://www.amazon.com/gp/product/1680524755/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
--   [MNIST](http://yann.lecun.com/exdb/mnist/)
+###Python Notebooks
+
+[Data Wrangling class](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/data_wrangling_time_and_content.ipynb)
+
+[Topic Modeling](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/SoMe_NLP.ipynb)
+
+[Sentiment Analysis](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/sentiment_analysis.ipynb)
+
 
 ### How to connect to the DS API
 
 | route               | description                       |
 |:----------------------------|:----------------------------------|
-| `POST: /demo_file`              | With an image attached, the predicted digits, sudoku solution (if applicable), and puzzle difficulty (if applicable) |
-| `GET: /solve?puzzle=*puzzle_string*`      | For submitted Sudoku String, returns sudoku solution (if applicable), and difficulty (if applicable) |
-| `DEV ONLY /reset` | Drops Tables and reinitiates database. Use only in testing. |
-| `/bulk_processing` | Batch Processing of images in raw_images folder in S3, useful for upates to image processing|
-| `/train` | Submit all valid Sudoku Puzzles images (as numpy arrays) and predicted values to a validation S3 folder to be fed into Sagemaker Training |
-| `/upload` | Simple HTML page to test image upload independent of front end (used for DS testing) |
+| `GET: /`              | Verifies the API is deployed, and links to the docs. |
+| `POST: /recommend`              | With Twitter handle input, returns optimal post time. |
+| `POST: /topic_model/schedule`      | With Twitter handle input, returns topic modeling processing time. |
+| `POST: /topic_model/status` | Returns status of topic modeling process. |
+| `POST: /topic_model/get_topics` | Returns a dictionary of all topics and a list of keywords. |
+
 
 
 #### Postman API Request Examples
