@@ -85,8 +85,8 @@ def build_post_list(user_screen_name, num_followers_to_scan=100):
             pass  # This usually happens if a user has protected tweets. No way around this, really.
 
         count = count + 1
-        sys.stdout.write("\r" + str(count) + " out of " + str(len(followers_ids)))
-        timeline_timer.wait()  # Makes things slow, but twitter is happier if each request is spaced out. 
+        # sys.stdout.write("\r" + str(count) + " out of " + str(len(followers_ids)))
+        # timeline_timer.wait()  # Makes things slow, but twitter is happier if each request is spaced out. 
 
     return post_dict
 

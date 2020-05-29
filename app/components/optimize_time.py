@@ -16,8 +16,9 @@ class data_wrangling:
         self.user_id = user_id
         self.follower_count = follower_count
 
-        TWITTER_API_KEY = os.environ["TWITTER_API_KEY"]
-        TWITTER_API_SECRET = os.environ["TWITTER_API_SECRET"]
+        load_dotenv()
+        TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
+        TWITTER_API_SECRET = os.getenv("TWITTER_API_SECRET")
         
         auth = tweepy.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SECRET)
         self.api = tweepy.API(auth, wait_on_rate_limit=True)
