@@ -38,7 +38,7 @@ def build_model(twitter_handle, num_followers_to_scan):
     nlp = spacy.load('en_core_web_sm')
 
     tokenizer = Tokenizer(nlp.vocab)
-    custom_stopwords = ['amp', '&amp', '&', '⠀']
+    custom_stopwords = ['&amp;', '&', '⠀', '|']
     # Customize stop words by adding to the default list. Add other stop words for good measure.
     stopwords = nlp.Defaults.stop_words.union(custom_stopwords).union(wordcloud_stopwords).union(gensim_stopwords)
 
