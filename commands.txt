@@ -2,5 +2,5 @@ Build docker image:
 docker build -t myimage .
 
 Run docker image:
-docker run --env-file .env -d --name mycontainer -p 80:80 myimage
+docker run -d --name mycontainer -p 80:80 myimage
 Then go to docker desktop, go to your list of containers, and click "open in browser"

@@ -20,11 +20,9 @@ from gensim.corpora import Dictionary
 from gensim.models.ldamulticore import LdaMulticore
 from gensim.models import LdaModel
 from gensim.models.coherencemodel import CoherenceModel
-from gensim.parsing.preprocessing import STOPWORDS as SW
-from wordcloud import STOPWORDS
-stopwords = set(STOPWORDS)
-
-### ask lawrence if he agrees to have the cleaned data set stored at elephantsql
+from gensim.parsing.preprocessing import STOPWORDS as gensim_stopwords
+from wordcloud import STOPWORDS as wordcloud_stopwords
+wordcloud_stopwords = set(wordcloud_stopwords)
 
 
 def build_model(twitter_handle, num_followers_to_scan):
@@ -40,17 +38,15 @@ def build_model(twitter_handle, num_followers_to_scan):
     nlp = spacy.load('en_core_web_sm')
 
     tokenizer = Tokenizer(nlp.vocab)
-    custom_stopwords = ['amp', '&amp', '&']
-    # Customize stop words by adding to the default list
-    STOP_WORDS = nlp.Defaults.stop_words.union(custom_stopwords)
-    # ALL_STOP_WORDS = spacy + gensim + wordcloud
-    ALL_STOP_WORDS = STOP_WORDS.union(SW).union(stopwords)
+    custom_stopwords = ['amp', '&amp', '&', '⠀']
+    # Customize stop words by adding to the default list. Add other stop words for good measure.
+    stopwords = nlp.Defaults.stop_words.union(custom_stopwords).union(wordcloud_stopwords).union(gensim_stopwords)
 
     tokens = []
     for doc in tokenizer.pipe(df['tweets'], batch_size=500):
         doc_tokens = []  
         for token in doc:
-            if token.text.lower() not in ALL_STOP_WORDS:
+            if token.text.lower() not in stopwords:
                 doc_tokens.append(token.text.lower())
         tokens.append(doc_tokens)
     # Makes tokens column
