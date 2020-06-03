@@ -8,27 +8,20 @@ import calendar
 import pandas as pd
 from dotenv import load_dotenv
 
-load_dotenv()
-
-TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
-TWITTER_API_SECRET = os.getenv("TWITTER_API_SECRET")
-TWITTER_ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN")
-TWITTER_ACCESS_TOKEN_SECRET = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
-
-auth = tweepy.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SECRET)
-auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth, wait_on_rate_limit=True)
-
 
 class data_wrangling:
-    
-    # Definining api as a class variable (shared among all instances of the class) 
-    api = tweepy.API(auth, wait_on_rate_limit=True)    
     
     def __init__(self, user_id, follower_count=10):
         # instance variables (unique for each instance of the class)
         self.user_id = user_id
         self.follower_count = follower_count
+
+        load_dotenv()
+        TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
+        TWITTER_API_SECRET = os.getenv("TWITTER_API_SECRET")
+        
+        auth = tweepy.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SECRET)
+        self.api = tweepy.API(auth, wait_on_rate_limit=True)
 
     def todays_date():
         today = date.today()
@@ -49,7 +42,7 @@ class data_wrangling:
         
     # The first 10 ids of the user's followers
     def followers_ids(self):
-        followers_ids = api.followers_ids(self.user_id)
+        followers_ids = self.api.followers_ids(self.user_id)
         return followers_ids
     
     def get_follower_data(self, followers_ids):
@@ -63,7 +56,7 @@ class data_wrangling:
             # Try and excepts statement to bipass an error that arises when we call a protected user's information
             try:
 
-                favorited_tweets = api.favorites(id=f'{followers}')
+                favorited_tweets = self.api.favorites(id=f'{followers}')
 
                 # Fir each tweet that the follower liked, lets add it to the l string    
                 for tweet in range(len(favorited_tweets)):

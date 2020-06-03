@@ -1,1 +1,0 @@
-web: gunicorn -w 4 flask_app:APP -t 120
