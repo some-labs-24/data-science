@@ -102,8 +102,8 @@ if __name__ == "__main__":
 
     # Uncomment this if you want to build a corpus for testing:
 
-    # filename = "dutchbros_followers.json"
+    filename = "dutchbros_followers.json"
 
-    # with open(filename, 'w') as fp:
-    #     json.dump(new_list, fp)
-    # fp.close()
+    with open(filename, 'w') as fp:
+        json.dump(new_list, fp)
+    fp.close()

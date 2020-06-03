@@ -7,6 +7,9 @@ __pycache__
 
 settings.json
 
+Pipfile
+Pipfile.lock
+
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml

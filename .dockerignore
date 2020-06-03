@@ -7,3 +7,6 @@
 .gitignore
 
 .python_notebooks/*
+
+Pipfile
+Pipfile.lock
