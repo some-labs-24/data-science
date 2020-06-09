@@ -12,3 +12,6 @@ settings.json
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Pycharm Files
+.idea
