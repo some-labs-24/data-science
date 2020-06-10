@@ -8,6 +8,7 @@ from components.optimize_time import data_wrangling
 from components.build_model import build_model
 from components.db_functions import save_model_results, get_model_results, is_name_in_queue, is_name_in_processing, \
     is_model_ready, add_name_to_queue, move_to_processing, remove_from_processing
+from components.calculate_engagement import calculate_engagement
 
 import json
 
@@ -122,16 +123,14 @@ async def status(user_input: TwitterHandleInput):
 
     twitter_handle = request_dict['twitter_handle']
 
-    # TODO: Replace dummy data
-
-    dummy_data = {
+    data = {
         'success': True,
         'queued': is_name_in_queue(twitter_handle),
         'processing': is_name_in_processing(twitter_handle),
         'model_ready': is_model_ready(twitter_handle)
     }
 
-    return JSONResponse(content=dummy_data)
+    return JSONResponse(content=data)
 
 
 @app.post('/topic_model/get_topics')
@@ -157,3 +156,15 @@ async def get_topics(user_input: TwitterHandleInput):
         }
 
     return JSONResponse(content=data)
+
+
+@app.post('/engagement')
+async def get_engagement(user_input: TwitterHandleInput):
+    request_dict = user_input.dict()
+
+    twitter_handle = request_dict['twitter_handle']
+
+    data = calculate_engagement(twitter_handle)
+
+    return JSONResponse(content=data)
+
