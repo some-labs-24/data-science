@@ -10,6 +10,7 @@ psycopg2-binary
 ipykernel
 nltk
 scipy
+plotly
 
 spacy == 2.2.3
 gensim == 3.8.1
