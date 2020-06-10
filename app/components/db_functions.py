@@ -5,8 +5,11 @@ import os
 
 
 def get_db_connection():
+    """
+    Starts a connection to the AWS database and returns the connection object.
+    """
     load_dotenv()
-    
+
     DB_NAME = os.getenv("DB_NAME")
     DB_USER = os.getenv("DB_USER")
     DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -14,10 +17,13 @@ def get_db_connection():
     DB_PORT = os.getenv("DB_PORT")
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
 
-    return (connection)
+    return connection
 
 
 def save_model_results(twitter_handle, json_string):
+    """
+    Saves a model result (in the form of a json string) to the database.
+    """
     twitter_handle = twitter_handle.lower()
 
     current_date = datetime.now().strftime("%m/%d/%Y")
@@ -61,7 +67,7 @@ def save_model_results(twitter_handle, json_string):
 
 def get_model_results(twitter_handle):
     """
-
+    Returns model results from database in the form of a dictionary.
     """
     twitter_handle = twitter_handle.lower()
     connection = get_db_connection()
@@ -73,7 +79,7 @@ def get_model_results(twitter_handle):
     connection.close()
     return data
 
-    
+
 def is_name_in_queue(twitter_handle):
     """
     Returns True if a twitter handle is on the queue list.
@@ -176,6 +182,9 @@ def add_name_to_queue(twitter_handle):
 
 
 def move_to_processing(twitter_handle):
+    """
+    Removes a name from the queue and moves it to processing.
+    """
     twitter_handle = twitter_handle.lower()
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -204,7 +213,11 @@ def move_to_processing(twitter_handle):
     connection.commit()
     connection.close()
 
+
 def remove_from_processing(twitter_handle):
+    """
+    Removes a name from the processing list in the database.
+    """
     twitter_handle = twitter_handle.lower()
     connection = get_db_connection()
     cursor = connection.cursor()

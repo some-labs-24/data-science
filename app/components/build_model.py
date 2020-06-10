@@ -1,25 +1,16 @@
 from components.build_post_list import build_post_list
 from components.tweet_cleaning import emoji_free_text, url_free_text
 
-# Required Libraries
-
 # Base and Cleaning
-import json
-import requests
 import pandas as pd
-import numpy as np
-import emoji
 import re
 import string
-from collections import Counter
 
 # Natural Language Processing (NLP)
 import spacy
 from spacy.tokenizer import Tokenizer
 from gensim.corpora import Dictionary
-from gensim.models.ldamulticore import LdaMulticore
 from gensim.models import LdaModel
-from gensim.models.coherencemodel import CoherenceModel
 from gensim.parsing.preprocessing import STOPWORDS as gensim_stopwords
 from wordcloud import STOPWORDS as wordcloud_stopwords
 
@@ -57,7 +48,7 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
     df['tokens'] = tokens
     # Make tokens a string again
 
-    # Refrence 4 : https://stackoverflow.com/questions/45306988/column-of-lists-convert-list-to-string-as-a-new-column
+    # Reference 4 : https://stackoverflow.com/questions/45306988/column-of-lists-convert-list-to-string-as-a-new-column
     df['tokens_back_to_text'] = [' '.join(map(str, l)) for l in df['tokens']]
 
     # Lemmitization
@@ -72,7 +63,7 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
         # Something goes here :P
         for token in doc:
 
-            if ((token.is_stop == False) and (token.is_punct == False)) and (token.pos_ != 'PRON'):
+            if ((token.is_stop is False) and (token.is_punct is False)) and (token.pos_ != 'PRON'):
                 lemmas.append(token.lemma_)
 
         return lemmas
@@ -80,7 +71,7 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
     df['lemmas'] = df['tokens_back_to_text'].apply(get_lemmas)
 
     # Make lemmas a string again
-    df['lemmas_back_to_text'] = [' '.join(map(str, l)) for l in df['lemmas']]
+    df['lemmas_back_to_text'] = [' '.join(map(str, lemma)) for lemma in df['lemmas']]
 
     # Tokenizing lemmas and cleaning tokens
     def tokenize(text):
@@ -94,20 +85,20 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
         # Removing url's
         pattern = r"http\S+"
 
-        tokens = re.sub(pattern, "", text)  # https://www.youtube.com/watch?v=O2onA4r5UaY
-        tokens = re.sub('[^a-zA-Z 0-9]', '', text)
-        tokens = re.sub('[%s]' % re.escape(string.punctuation), '', text)  # Remove punctuation
-        tokens = re.sub('\w*\d\w*', '', text)  # Remove words containing numbers
-        tokens = re.sub('@*!*\$*', '', text)  # Remove @ ! $
-        tokens = tokens.strip(',')  # TESTING THIS LINE
-        tokens = tokens.strip('?')  # TESTING THIS LINE
-        tokens = tokens.strip('!')  # TESTING THIS LINE
-        tokens = tokens.strip("'")  # TESTING THIS LINE
-        tokens = tokens.strip(".")  # TESTING THIS LINE
+        text = re.sub(pattern, "", text)  # https://www.youtube.com/watch?v=O2onA4r5UaY
+        text = re.sub('[^a-zA-Z 0-9]', '', text)
+        text = re.sub('[%s]' % re.escape(string.punctuation), '', text)  # Remove punctuation
+        text = re.sub('\w*\d\w*', '', text)  # Remove words containing numbers
+        text = re.sub('@*!*\$*', '', text)  # Remove @ ! $
+        text = text.replace(',', '')  # TESTING THIS LINE
+        text = text.replace('?', '')  # TESTING THIS LINE
+        text = text.replace('!', '')  # TESTING THIS LINE
+        text = text.replace("'", '')  # TESTING THIS LINE
+        text = text.replace(".", '')  # TESTING THIS LINE
 
-        tokens = tokens.lower().split()  # Make text lowercase and split it
+        text_tokens = text.lower().split()  # Make text lowercase and split it
 
-        return tokens
+        return text_tokens
 
     # Apply tokenizer
     df['lemma_tokens'] = df['lemmas_back_to_text'].apply(tokenize)
@@ -121,8 +112,7 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
     # Creating a corpus object 
     corpus = [id2word.doc2bow(d) for d in df['lemma_tokens']]
 
-    # Instantiating a LDA model 
-    # model = LdaMulticore(corpus=corpus, num_topics=5, id2word=id2word, workers=1, passes=1)
+    # Instantiating a LDA model
     model = LdaModel(corpus=corpus, num_topics=5, id2word=id2word, passes=5)
 
     # Filtering for words 
@@ -133,8 +123,8 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
 
     # Load up dictionary for return value
     topics_dict = {"topics": {}}
-    for id, t in enumerate(topics):
-        topics_dict['topics'][id + 1] = t.split(" ")
+    for topic_number, topic in enumerate(topics):
+        topics_dict['topics'][topic_number + 1] = topic.split(" ")
 
     return topics_dict
 

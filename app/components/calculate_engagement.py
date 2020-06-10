@@ -7,11 +7,13 @@ from components.build_post_list import tweet_date_check
 
 
 # TODO: If we ever get a premium API, switch num_favorites for num_replies. This is a better metric.
+# TODO: api.user_timeline returns at most 200 tweets. We can check more with a tweepy.Cursor object.
 
 
 def calculate_engagement(twitter_handle):
     """
-    Returns the number of followers, number of retweets, number of replies, and engagement ratio over the last 30 days.
+    Returns the number of followers, number of retweets, number of favorites, and engagement ratio over the last 30
+    days.
     """
     load_dotenv()
 
