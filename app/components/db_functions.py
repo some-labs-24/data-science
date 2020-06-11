@@ -97,11 +97,13 @@ def is_name_in_queue(twitter_handle):
     cursor.execute(query)
     connection.commit()
 
-    query = "SELECT * FROM queue WHERE twitter_handle = '{}' ".format(twitter_handle)
+    query = """
+    SELECT EXISTS(SELECT 1 FROM queue WHERE twitter_handle='{}');
+    """.format(twitter_handle)
     cursor.execute(query)
-    return_val = len(cursor.fetchall()) == 1
+    name_exists = cursor.fetchall()[0][0]
     connection.close()
-    return return_val
+    return name_exists
 
 
 def is_name_in_processing(twitter_handle):
@@ -121,11 +123,13 @@ def is_name_in_processing(twitter_handle):
     cursor.execute(query)
     connection.commit()
 
-    query = "SELECT * FROM processing WHERE twitter_handle = '{}';".format(twitter_handle)
+    query = """
+    SELECT EXISTS(SELECT 1 FROM processing WHERE twitter_handle='{}');
+    """.format(twitter_handle)
     cursor.execute(query)
-    return_val = len(cursor.fetchall()) == 1
+    name_exists = cursor.fetchall()[0][0]
     connection.close()
-    return return_val
+    return name_exists
 
 
 def is_model_ready(twitter_handle):
@@ -145,15 +149,13 @@ def is_model_ready(twitter_handle):
     cursor.execute(query)
     connection.commit()
 
-    query = "SELECT * FROM results WHERE twitter_handle = '{}';".format(twitter_handle)
+    query = """
+    SELECT EXISTS(SELECT 1 FROM results WHERE twitter_handle='{}');
+    """.format(twitter_handle)
     cursor.execute(query)
-
-    try:
-        return_val = len(cursor.fetchall()) == 1
-    except psycopg2.ProgrammingError:
-        return_val = False
+    name_exists = cursor.fetchall()[0][0]
     connection.close()
-    return return_val
+    return name_exists
 
 
 def add_name_to_queue(twitter_handle):
@@ -229,3 +231,94 @@ def remove_from_processing(twitter_handle):
     cursor.execute(query)
     connection.commit()
     connection.close()
+
+
+def is_name_in_engagement(twitter_handle):
+    """
+    Returns True if a user already has engagement data in the database.
+    """
+    twitter_handle = twitter_handle.lower()
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    query = """
+    CREATE TABLE IF NOT EXISTS engagement (
+        twitter_handle VARCHAR PRIMARY KEY,
+        num_followers INT,
+        num_retweets INT,
+        num_likes INT,
+        engagement_ratio FLOAT
+    );
+    """
+    cursor.execute(query)
+    connection.commit()
+
+    query = """
+    SELECT EXISTS(SELECT 1 FROM engagement WHERE twitter_handle='{}');
+    """.format(twitter_handle)
+    cursor.execute(query)
+    name_exists = cursor.fetchall()[0][0]
+    connection.close()
+    return name_exists
+
+
+def update_engagement(twitter_handle, num_followers, num_retweets, num_likes, engagement_ratio):
+    """
+    Updates the engagement table in the database.
+    """
+    twitter_handle = twitter_handle.lower()
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    query = """
+    CREATE TABLE IF NOT EXISTS engagement (
+        twitter_handle VARCHAR PRIMARY KEY,
+        num_followers INT,
+        num_retweets INT,
+        num_likes INT,
+        engagement_ratio FLOAT
+    );
+    """
+    cursor.execute(query)
+    connection.commit()
+
+    query = """
+    INSERT INTO engagement
+    VALUES ('{}', {}, {}, {}, {})
+    ON CONFLICT (twitter_handle) DO UPDATE
+    SET num_followers={}, num_retweets={}, num_likes={}, engagement_ratio={};
+    """.format(twitter_handle, num_followers, num_retweets, num_likes, engagement_ratio,
+               num_followers, num_retweets, num_likes, engagement_ratio)
+
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+
+
+def get_engagement(twitter_handle):
+    """
+    Returns the engagement data in dictionary form from the database.
+    """
+    twitter_handle = twitter_handle.lower()
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    query = """
+    SELECT * from engagement
+    WHERE twitter_handle = '{}';
+    """.format(twitter_handle)
+    cursor.execute(query)
+    data = cursor.fetchall()[0]
+    connection.close()
+
+    return {
+        'num_followers': data[1],
+        'num_retweets': data[2],
+        'num_favorites': data[3],
+        'engagement_ratio': data[4]
+    }
+
+
+if __name__ == "__main__":
+    print(is_model_ready('dutchbros'))
+    print(is_name_in_processing('dutchbros'))
