@@ -3,16 +3,18 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel
+from tweepy.error import RateLimitError
 
 from components.optimize_time import data_wrangling
 from components.build_model import build_model
-from components.db_functions import save_model_results, get_model_results, is_name_in_queue, is_name_in_processing, is_model_ready, add_name_to_queue, move_to_processing, remove_from_processing
+from components import db_functions
+from components.calculate_engagement import calculate_engagement
 
 import json
 
 app = FastAPI()
 
-# Neccessary for CORS:
+# Necessary for CORS:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,19 +23,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class TwitterIDAndHandleInput(BaseModel):
-    """
-    JSON input that takes both a twitter ID and a twitter handle.
-    """
-    user_id: int
-    twitter_handle: str
-
 
 class TwitterHandleInput(BaseModel):
     """
     JSON input that takes only a twitter handle.
     """
     twitter_handle: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "twitter_handle": "dutchbros",
+            }
+        }
+
+
+class TopicModelBuildingInput(BaseModel):
+    """
+    JSON input for the /topic_model/schedule endpoint.
+    """
+    twitter_handle: str
+    num_followers_to_scan: int = 500
+    max_age_of_tweet: int = 7
+    words_to_ignore: list = []
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "twitter_handle": "dutchbros",
+                "num_followers_to_scan": 500,
+                "max_age_of_tweet": 7,
+                "words_to_ignore": ["shooting", "violence"],
+            }
+        }
 
 
 @app.get("/")
@@ -48,11 +70,10 @@ async def root():
 
 
 @app.post('/recommend')
-async def recommend(user_input: TwitterIDAndHandleInput):
+async def recommend(user_input: TwitterHandleInput):
     request_dict = user_input.dict()
 
     twitter_handle = request_dict['twitter_handle']
-    user_id = request_dict['user_id']
 
     dw = data_wrangling(twitter_handle, 5)
     followers_ids = dw.followers_ids()
@@ -64,25 +85,34 @@ async def recommend(user_input: TwitterIDAndHandleInput):
     return JSONResponse(content=baseline_time)
 
 
-def background_model_building(twitter_handle, num_followers_to_scan=500):
-    move_to_processing(twitter_handle)
-    data = build_model(twitter_handle, num_followers_to_scan)
-    remove_from_processing(twitter_handle)
-    save_model_results(twitter_handle, json.dumps(data))
+def background_model_building(twitter_handle, num_followers_to_scan=500, max_tweet_age=7, words_to_ignore=None):
+    """
+    This function is what runs in the background every time a topic modeling request is made.
+    """
+    if words_to_ignore is None:
+        words_to_ignore = []
+    db_functions.move_to_processing(twitter_handle)
+    data = build_model(twitter_handle, num_followers_to_scan, max_tweet_age, words_to_ignore)
+    db_functions.remove_from_processing(twitter_handle)
+    db_functions.save_model_results(twitter_handle, json.dumps(data))
 
 
 @app.post('/topic_model/schedule')
-async def schedule(user_input: TwitterHandleInput, background_tasks: BackgroundTasks):
+async def schedule(user_input: TopicModelBuildingInput, background_tasks: BackgroundTasks):
     request_dict = user_input.dict()
 
     twitter_handle = request_dict['twitter_handle']
-    
-    if is_name_in_queue(twitter_handle) or is_name_in_processing(twitter_handle):
+    num_followers_to_scan = request_dict['num_followers_to_scan']
+    max_age_of_tweet = request_dict['max_age_of_tweet']
+    words_to_ignore = request_dict['words_to_ignore']
+
+    if db_functions.is_name_in_queue(twitter_handle) or db_functions.is_name_in_processing(twitter_handle):
         data = {'success': False}
     else:
         data = {'success': True}
-        add_name_to_queue(twitter_handle)
-        background_tasks.add_task(background_model_building, twitter_handle, 500)
+        db_functions.add_name_to_queue(twitter_handle)
+        background_tasks.add_task(background_model_building, twitter_handle, num_followers_to_scan, max_age_of_tweet,
+                                  words_to_ignore)
 
     return JSONResponse(content=data)
 
@@ -93,16 +123,14 @@ async def status(user_input: TwitterHandleInput):
 
     twitter_handle = request_dict['twitter_handle']
 
-    # TODO: Replace dummy data
-
-    dummy_data = {
+    data = {
         'success': True,
-        'queued': is_name_in_queue(twitter_handle),
-        'processing': is_name_in_processing(twitter_handle),
-        'model_ready': is_model_ready(twitter_handle)
-        }
+        'queued': db_functions.is_name_in_queue(twitter_handle),
+        'processing': db_functions.is_name_in_processing(twitter_handle),
+        'model_ready': db_functions.is_model_ready(twitter_handle)
+    }
 
-    return JSONResponse(content=dummy_data)
+    return JSONResponse(content=data)
 
 
 @app.post('/topic_model/get_topics')
@@ -111,10 +139,10 @@ async def get_topics(user_input: TwitterHandleInput):
 
     twitter_handle = request_dict['twitter_handle']
 
-    if is_model_ready(twitter_handle):
-        data = get_model_results(twitter_handle)
+    if db_functions.is_model_ready(twitter_handle):
+        data = db_functions.get_model_results(twitter_handle)
         data['success'] = True
-        
+
     else:
         data = {
             'success': False,
@@ -124,7 +152,28 @@ async def get_topics(user_input: TwitterHandleInput):
                 3: [],
                 4: [],
                 5: []
-                }
             }
+        }
+
+    return JSONResponse(content=data)
+
+
+@app.post('/engagement')
+async def get_engagement(user_input: TwitterHandleInput, background_tasks: BackgroundTasks):
+    request_dict = user_input.dict()
+
+    twitter_handle = request_dict['twitter_handle']
+
+    try:
+        data = calculate_engagement(twitter_handle, wait_on_rate_limit=False)
+    except RateLimitError:
+        # This happens if we hit the rate limit when trying to get our user's timeline.
+        # When this happens, we get the data recorded in the database. If user is not in database, return 0s.
+        # Afterwards, set calculation task in background to update database when possible.
+        if db_functions.is_name_in_engagement(twitter_handle):
+            data = db_functions.get_engagement(twitter_handle)
+        else:
+            data = {'num_followers': 0, 'num_retweets': 0, 'num_favorites': 0, 'engagement_ratio': 0.0}
+        background_tasks.add_task(calculate_engagement, twitter_handle, True)
 
     return JSONResponse(content=data)

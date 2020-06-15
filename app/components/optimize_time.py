@@ -1,4 +1,4 @@
-import json 
+import json
 import os
 import tweepy
 
@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 
 class data_wrangling:
-    
+
     def __init__(self, user_id, follower_count=10):
         # instance variables (unique for each instance of the class)
         self.user_id = user_id
@@ -19,7 +19,7 @@ class data_wrangling:
         load_dotenv()
         TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
         TWITTER_API_SECRET = os.getenv("TWITTER_API_SECRET")
-        
+
         auth = tweepy.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SECRET)
         self.api = tweepy.API(auth, wait_on_rate_limit=True)
 
@@ -28,8 +28,8 @@ class data_wrangling:
         day = today.strftime("%b-%d-%Y").replace('-', ' ')
         my_date = date.today()
         return calendar.day_name[my_date.weekday()][:3] + ' ' + day
-    
-    def min_bin (mins):
+
+    def min_bin(mins):
         l = []
         for _min in mins:
             if _min < 30:
@@ -38,15 +38,14 @@ class data_wrangling:
                 l.append('30')
 
         return l
-        
-        
+
     # The first 10 ids of the user's followers
     def followers_ids(self):
         followers_ids = self.api.followers_ids(self.user_id)
         return followers_ids
-    
+
     def get_follower_data(self, followers_ids):
-        
+
         times = []
         text = []
 
@@ -60,13 +59,12 @@ class data_wrangling:
 
                 # Fir each tweet that the follower liked, lets add it to the l string    
                 for tweet in range(len(favorited_tweets)):
-
                     status = favorited_tweets[tweet]
 
-                    #convert to string
+                    # convert to string
                     json_str = json.dumps(status._json)
 
-                    #deserialise string into python object
+                    # deserialise string into python object
                     parsed = json.loads(json_str)
                     # gets the created_at (time) and the text from the tweets the followers liked
                     times.append(parsed.get('created_at'))
@@ -76,18 +74,19 @@ class data_wrangling:
 
                 pass
 
-        # seperates hours, mins into lists to be put into a df (leave hours as str to keep in military time for put request to backend)
+        # seperates hours, mins into lists to be put into a df
+        # (leave hours as str to keep in military time for put request to backend)
         hours, mins = [i[11:13] for i in times], [int(i[14:16]) for i in times]
-        
+
         _min_bin = data_wrangling.min_bin(mins)
-         
+
         # creates df with times and text
-        df = pd.DataFrame(data={'hours':hours, 'mins':mins, 'min_bin':_min_bin, 'text':text})
-        
+        df = pd.DataFrame(data={'hours': hours, 'mins': mins, 'min_bin': _min_bin, 'text': text})
+
         df['time'] = df['hours'].astype(str) + ':' + df['min_bin'].astype(str)
-        
+
         return df
-    
+
     def optimal_time(self, df):
         today = date.today()
         day = today.strftime("%b-%d-%Y").replace('-', ' ')
