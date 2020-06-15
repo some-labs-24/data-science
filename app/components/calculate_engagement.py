@@ -59,7 +59,7 @@ def calculate_engagement(twitter_handle, wait_on_rate_limit=False):
 
     # Calculate engagement:
     try:
-        engagement = round(((num_retweets + num_favorites) / num_followers) * 100, 2)
+        engagement = round((num_retweets + num_favorites) / num_followers, 4)
     except ZeroDivisionError:
         engagement = 0
 
