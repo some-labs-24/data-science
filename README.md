@@ -38,38 +38,11 @@ Languages: Python
 
 Frameworks: FastAPI
 
-Services: AWS, Docker, Jupyter Notebooks, Postman
+Services: AWS, Docker, Jupyter Notebooks, Postman, TablesPlus
 
-Below is an annotated breakout of the Cloud Architecture for SoMe. Each step is also explained below the diagram.
+Below is an annotated breakout of the Cloud Architecture for SoMe.
 
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/Omega2020%20-%20Annotated.png"/>](https://cloudcraft.co/view/7b1de017-7406-43f3-a54e-682fcdc7b28f?key=ZZYfXAD9cYsLAA_galrUGw)
-
-* (Black Arrow) - Standard Inflow of Data for uploading a Paper Sudoku Puzzle
-* (Orange Arrow) - Querying a Sudoku Puzzle String to solve
-* (Green Arrow) - Responses to Front End
-
-Data Pipeline:
-1. Web Team's Front end Deployed on Netlify at Omega2020.netlify.com
-2. Elastic Beanstalk endpoint, redirected from an HTTPS: hosted website.
-3. Auto scales between 1-4 servers to be able to handle spikes in demand.
-
-4. Entrypoint to Flask App
-    * **(Black Arrow)** First entry point within the Flask App, posts the raw image to S3.
-    * **(Orange Arrow)** Passes Puzzle string To Solver
-5. After the raw image is uploaded, it goes the Image Processing Script. Cropping out the Sudoku Puzzle from the image background, and subdivides a Sudoku Puzzle to 81 cells, stored as a list of 81 Numpy Arrays. Each Numpy Array is 784 integers long, representing a 28x28 pixel image.
-6. Solver Module
-    * **(Orange Arrow)** With Digits Passed via GET request from front end, solver checks if submitted Sudoku Puzzle is valid, if valid, the solution is passed as well as forecasted difficulty.
-    * **(Green Arrow)** With predicted digits passed back from Sagemaker API Endpoint, solver checks if submitted Sudoku Puzzle is valid, if valid, the solution is passed as well as forecasted difficulty. 
-7. Amazon API Endpoint called for Analysis. Acts as a handler between Flask App and Sagemaker back end.
-8. Lambda Function receives URL metadata from the API Gateway, and transforms it into the Sagemaker format.
-9. Amazon Sagemaker Scores the inbound predictions.
-10. S3 Bucket is organized into different folders of Raw Images, Processed Images, Individual Sudoku Cells, 
-
-Auxiliary Services:
-
-* A. AWS Ground Truth was used to initially bootstrap the training of our model where our team individually scored 5,000 digits from a Sudoku Puzzle Book.
-* B. The Sagemaker Train Function reads a specific folder in the S3 Bucket, and runs on a scheduled basis allowing **Omega2020 learns over time as more data is shared.**
-* C. Reference Puzzles generated from our scraper is pulled on request to the front end, organized by difficulty.
+[<img src="https://i.imgur.com/3RP40fj.png"/>](https://app.cloudcraft.co/view/b689739c-fad7-4f83-b28f-7fce3a661ae2?key=XqCQzefjYdbY_hs16dJiDg)
 
 
 ###  Models:
@@ -88,7 +61,7 @@ Auxiliary Services:
 
 -   [Time and text - Twitter API](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/app/main.py)
 
-###Python Notebooks
+### Python Notebooks
 
 [Data Wrangling class](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/data_wrangling_time_and_content.ipynb)
 
@@ -106,56 +79,152 @@ Auxiliary Services:
 | `POST: /topic_model/schedule`      | With Twitter handle input, returns topic modeling processing time. |
 | `POST: /topic_model/status` | Returns status of topic modeling process. |
 | `POST: /topic_model/get_topics` | Returns a dictionary of all topics and a list of keywords. |
+| `POST: /engagement` | Returns a dictionary of calculated engagement values from users tweets over 30 days. |
+
+Go to https://api.so-me.net/docs for more information and to test these endpoints.
 
 
+#### POST Request for scheduling topic modeling :
 
-#### Postman API Request Examples
-
-GET Request for the puzzle solution:
-
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/Omega2020%20-%20API%20Puzzle%20Solution%20Request.png" width = "600" />](https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/Omega2020%20-%20API%20Puzzle%20Solution%20Request.png) 
-
-API Request:
+API Request URL:
 
 ```
-https://api.lambda-omega2020.com/solve?puzzle=.7.8..6.4.36..5.1...514...2369.78.....2...5.....46.3987...319...9.2..18.5.4..7.6.
+https://api.so-me.net/topic_model/schedule
+```
+
+API Request Body:
+
+```
+{
+  "twitter_handle": "dutchbros",
+  "num_followers_to_scan": 500,
+  "max_age_of_tweet": 7,
+  "words_to_ignore": [
+    "shooting",
+    "violence"
+  ]
+}
 ```
 
 API Response:
 
 ```
 {
-  "difficulty": "Gentle",
-  "puzzle_status": 1,
-  "solution": "271893654436725819985146732369578421842319576157462398728631945693254187514987263",
-  "values": ".7.8..6.4.36..5.1...514...2369.78.....2...5.....46.3987...319...9.2..18.5.4..7.6."
+  "success": true
 }
-
 ```
 
-POST Request for image upload:
+#### POST Request for topic modeling status:
 
-[<img src="https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/Omega2020%20-%20API%20Puzzle%20Upload%20Request.png" width = "600" />](https://github.com/Lambda-School-Labs/omega2020-ds/blob/master/readme_files/Omega2020%20-%20API%20Puzzle%20Upload%20Request.png) 
-
-
-API Request:
+API Request URL:
 
 ```
-https://api.lambda-omega2020.com/demo_file
+https://api.so-me.net/topic_model/status
+```
 
-Image in the file paramater.
+API Request Body:
+
+```
+{
+  "twitter_handle": "dutchbros"
+}
 ```
 
 API Response:
 
 ```
 {
-  "difficulty": "Gentle",
-  "puzzle_status": 1,
-  "solution": "271893654436725819985146732369578421842319576157462398728631945693254187514987263",
-  "values": ".7.8..6.4.36..5.1...514...2369.78.....2...5.....46.3987...319...9.2..18.5.4..7.6."
+  "success": true,
+  "queued": false,
+  "processing": true,
+  "model_ready": true
 }
+```
 
+#### POST Request for getting topic modeling results:
+
+API Request URL:
+
+```
+https://api.so-me.net/topic_model/get_topics
+```
+
+API Request Body:
+
+```
+{
+  "twitter_handle": "dutchbros"
+}
+```
+
+API Response:
+
+```
+{
+  "topics": {
+    "1": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "2": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "3": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "4": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "5": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ]
+  },
+  "success": true
+}
 ```
 
 
@@ -163,33 +232,35 @@ API Response:
 
 This package uses enviornment variables stored in a .env file to store secrets, example of used variables here:
 
-
-#### .env file
+#### /app/.env file (replace with real variables!)
 ```
-FLASK_ENV=development
-FLASK_DEBUG=TRUE
-DATABASE_URL='postgres://username:password@hostname:5432/database'
-S3_KEY = 'KEY_HERE'
-S3_SECRET = 'SECRET_HERE'
-S3_BUCKET = 'omega2020-ds' #S3 Buket Name
-S3_LOCATION = 'https://omega2020-ds.s3.amazonaws.com/' #S3 Bucket URL
-ExtraArgs='{"ACL": "public-read", "ContentType": "image/png", "ContentDisposition": "inline"}' #extra arguments for image uploads
-MODEL_FILEPATH='data/reference_knn_model.sav' #relative path for where local model files are scored in with the reference KNN model in the package
-TRAIN_DATABASE_HOST= 'database-1.us-east-1.rds.amazonaws.com'#Deployed on AWS RDS
-TRAIN_DATABASE_PW = 'databasepassword' 
-TRAIN_DATABASE_USER = 'postgres' #default value for postgres RDS databaes
-TRAIN_DATABASE_TABLE = 'postgres' #default value for postgres RDS databaes
-SAGEMAKER_API_URL = 'https://execute-api.us-east-1.amazonaws.com/test/omega-predict-digits-s3/' #used if sagemaker endpoint is sued
+# Twitter credentials
+TWITTER_API_KEY="KEY_HERE"
+TWITTER_API_SECRET="SECRET_HERE"
+
+# Credentials for AWS database
+DB_NAME = "database_name_here"
+DB_USER = "database_login_here"
+DB_PASSWORD = "database_password_here"
+DB_HOST = "database_url_here"
+DB_PORT = "database_port_here"
 ```
 
 #### Deployment
 
-This app as structured is intended to be deployed using AWS Elastic Beanstalk. The .ebextensions folder contains configuration for CORS as well as HTTPS certification, but requires an updated Role with the ARN linked to the AWS Certificate Manager role for the signed SSL certificate. (SSL Is required to work in production with netlify, as netlify will not accept HTTP traffic).
+This app is designed to be deployed using AWS Elatic Beanstalk as a docker container. Please read the ```commands.md``` file for a list of relevant commands on how to do this.
 
+For deployment to work, the following needs to be done in addition to cloning this repo locally:
+
+* The ```.env``` file needs to be downloaded and added to the directory ```app``` (the same directory as ```main.py``` ). See above for the required variables in this file. Contact your team lead or previous team members for this information if you have trouble finding it.
+
+* The file ```config.yml``` needs to be added to the ```.elasticbeanstalk``` directory. This can be done by the command ```eb init -p docker So-Me-DS-API``` as listed in ```commands.md```. You will need to connect to your AWS account to do this.
+
+Additional Pipenv related files are included in the repo, but Pipenv is NOT used during deployment, and only included for development and testing purposes. 
 
 #### Issues
 
-We are documenting outstanding issues on the issues page of this repo: https://github.com/Lambda-School-Labs/omega2020-ds/issues
+We are documenting outstanding issues on the issues page of this repo: https://github.com/Lambda-School-Labs/social-media-strategy-ds/issues
 
 
 ### Issue/Bug Request
@@ -236,6 +307,6 @@ Naked Twins Solver Technique Reference: http://hodoku.sourceforge.net/en/tech_na
 
 ## Documentation
 
-See [Backend Documentation](https://github.com/Lambda-School-Labs/omega2020-be) for details on the backend of our project.
+See [Backend Documentation](https://github.com/Lambda-School-Labs/social-media-strategy-be) for details on the backend of our project.
 
-See [Front End Documentation](https://github.com/Lambda-School-Labs/omega2020-fe) for details on the front end of our project.
+See [Front End Documentation](https://github.com/Lambda-School-Labs/social-media-strategy-fe) for details on the front end of our project.
