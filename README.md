@@ -42,7 +42,7 @@ Services: AWS, Docker, Jupyter Notebooks, Postman, TablesPlus
 
 Below is an annotated breakout of the Cloud Architecture for SoMe.
 
-[<img src="https://i.imgur.com/XXKov6D.png"/>](https://app.cloudcraft.co/view/b689739c-fad7-4f83-b28f-7fce3a661ae2?key=XqCQzefjYdbY_hs16dJiDg)
+[<img src="https://i.imgur.com/rAowDSt.png"/>](https://app.cloudcraft.co/view/b689739c-fad7-4f83-b28f-7fce3a661ae2?key=XqCQzefjYdbY_hs16dJiDg)
 
 
 ###  Models:
@@ -262,6 +262,25 @@ Additional Pipenv related files are included in the repo, but Pipenv is NOT used
 
 We are documenting outstanding issues on the issues page of this repo: https://github.com/Lambda-School-Labs/social-media-strategy-ds/issues
 
+### Future Ideas! (Read this, Labs 25!)
+
+For future teams that contribute to this project, there are a number of different directions they could go. However, here are some ideas that have been floated around:
+
+* The newly created "analytics" page on the So-Me site is a perfect place to put any future machine learning features.
+
+* The front end does not currently incorporate the additional inputs for the 'scheduling' endpoint. Work with them to incorporate this feature more fully, including variables like custom stopwords, tweet age, and number of followers to scan.
+
+* A function already exists that builds a corpus out of posts that a twitter user's followers engage with. This corpus could be used for things other than the existing topic modeling feature. 
+
+* Currently, the only thing being returned is the topic modeling results. However, returning things like the most common words, #hashtags, and @mentions BEFORE topic modeling might be useful information that could easily be added to the topic modeling process. 
+
+* A number of changes could be made the architecture of the project: 
+
+   * The Twitter scanning and machine learning model building could be offloaded from the FastAPI app to a singular background worker app, running something like Celery. This app should be given a seperate Twitter API key.
+
+   * Security features could be added to the API, preventing unauthorized users from accessing it. The same could be done for the database, which currently uses a very open security group.
+
+   * Models could be pickled and stored on AWS S3 for future use. Currently, the results of the model in JSON format are the only thing being stored.
 
 ### Issue/Bug Request
 
