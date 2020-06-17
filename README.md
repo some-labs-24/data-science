@@ -83,8 +83,8 @@ Below is an annotated breakout of the Cloud Architecture for SoMe.
 
 Go to https://api.so-me.net/docs for more information and to test these endpoints.
 
-#### Example Requests
-##### POST Request for scheduling topic modeling :
+
+#### POST Request for scheduling topic modeling :
 
 API Request URL:
 
@@ -114,7 +114,7 @@ API Response:
 }
 ```
 
-##### POST Request for topic modeling status:
+#### POST Request for topic modeling status:
 
 API Request URL:
 
@@ -141,7 +141,7 @@ API Response:
 }
 ```
 
-##### POST Request for getting topic modeling results:
+#### POST Request for getting topic modeling results:
 
 API Request URL:
 
