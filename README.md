@@ -61,7 +61,7 @@ Below is an annotated breakout of the Cloud Architecture for SoMe.
 
 -   [Time and text - Twitter API](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/app/main.py)
 
-###Python Notebooks
+### Python Notebooks
 
 [Data Wrangling class](https://github.com/Lambda-School-Labs/social-media-strategy-ds/blob/master/python_notebooks/data_wrangling_time_and_content.ipynb)
 
@@ -81,25 +81,149 @@ Below is an annotated breakout of the Cloud Architecture for SoMe.
 | `POST: /topic_model/get_topics` | Returns a dictionary of all topics and a list of keywords. |
 | `POST: /engagement` | Returns a dictionary of calculated engagement values from users tweets over 30 days. |
 
+Go to https://api.so-me.net/docs for more information and to test these endpoints.
 
+#### Example Requests
+##### POST Request for scheduling topic modeling :
 
-#### Postman API Request Examples
+API Request URL:
 
-##### POST Request for ___ :
-
-```API Request URL:
-https://api.so-me.net/
+```
+https://api.so-me.net/topic_model/schedule
 ```
 
-```API Request Body:
+API Request Body:
+
+```
 {
-...
+  "twitter_handle": "dutchbros",
+  "num_followers_to_scan": 500,
+  "max_age_of_tweet": 7,
+  "words_to_ignore": [
+    "shooting",
+    "violence"
+  ]
 }
 ```
 
-```API Response:
+API Response:
+
+```
 {
-...
+  "success": true
+}
+```
+
+##### POST Request for topic modeling status:
+
+API Request URL:
+
+```
+https://api.so-me.net/topic_model/status
+```
+
+API Request Body:
+
+```
+{
+  "twitter_handle": "dutchbros"
+}
+```
+
+API Response:
+
+```
+{
+  "success": true,
+  "queued": false,
+  "processing": true,
+  "model_ready": true
+}
+```
+
+##### POST Request for getting topic modeling results:
+
+API Request URL:
+
+```
+https://api.so-me.net/topic_model/get_topics
+```
+
+API Request Body:
+
+```
+{
+  "twitter_handle": "dutchbros"
+}
+```
+
+API Response:
+
+```
+{
+  "topics": {
+    "1": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "2": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "3": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "4": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "5": [
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "...",
+      "..."
+    ]
+  },
+  "success": true
 }
 ```
 
