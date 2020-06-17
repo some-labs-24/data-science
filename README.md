@@ -42,7 +42,7 @@ Services: AWS, Docker, Jupyter Notebooks, Postman, TablesPlus
 
 Below is an annotated breakout of the Cloud Architecture for SoMe.
 
-[<img src="https://i.imgur.com/3RP40fj.png"/>](https://app.cloudcraft.co/view/b689739c-fad7-4f83-b28f-7fce3a661ae2?key=XqCQzefjYdbY_hs16dJiDg)
+[<img src="https://i.imgur.com/XXKov6D.png"/>](https://app.cloudcraft.co/view/b689739c-fad7-4f83-b28f-7fce3a661ae2?key=XqCQzefjYdbY_hs16dJiDg)
 
 
 ###  Models:
