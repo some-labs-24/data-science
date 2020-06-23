@@ -113,7 +113,16 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
     corpus = [id2word.doc2bow(d) for d in df['lemma_tokens']]
 
     # Instantiating a LDA model
-    model = LdaModel(corpus=corpus, num_topics=5, id2word=id2word, passes=5)
+    # model = LdaModel(corpus=corpus, num_topics=5, id2word=id2word, passes=5)
+    model = LdaModel(
+        corpus=corpus,
+        id2word=id2word,
+        num_topics=68,
+        random_state=42,
+        chunksize=2000,
+        passes=25,
+        decay=0.5,
+        iterations=70)
 
     # Filtering for words 
     words = [re.findall(r'"([^"]*)"', t[1]) for t in model.print_topics()]
@@ -124,7 +133,8 @@ def build_model(twitter_handle, num_followers_to_scan, max_tweet_age=7, user_sto
     # Load up dictionary for return value
     topics_dict = {"topics": {}}
     for topic_number, topic in enumerate(topics):
-        topics_dict['topics'][topic_number + 1] = topic.split(" ")
+        if topic_number + 1 <= 5:
+            topics_dict['topics'][topic_number + 1] = topic.split(" ")
 
     return topics_dict
 
