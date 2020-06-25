@@ -10,6 +10,16 @@ from components.db_functions import update_engagement
 # TODO: If we ever get a premium API, switch num_favorites for num_replies. This is a better metric.
 
 
+def is_retweet(tweet):
+    post_is_retweet = True
+    try:
+        tweet.retweeted_status
+    except AttributeError:
+        post_is_retweet = False
+    finally:
+        return post_is_retweet
+
+
 def calculate_engagement(twitter_handle, wait_on_rate_limit=False):
     """
     Returns the number of followers, number of retweets, number of favorites, and engagement ratio over the last 30
@@ -38,7 +48,7 @@ def calculate_engagement(twitter_handle, wait_on_rate_limit=False):
         statuses = api.user_timeline(screen_name=twitter_handle, count=200, page=page)
         if statuses:
             for status in statuses:
-                if tweet_date_check(status, 30):
+                if tweet_date_check(status, 30) and not is_retweet(status):
                     timeline.append(status)
                 else:
                     # Found an old tweet, time to stop reading.
@@ -48,8 +58,6 @@ def calculate_engagement(twitter_handle, wait_on_rate_limit=False):
             # No more tweets!
             keep_reading = False
         page += 1  # next page
-
-    print(len(timeline))
 
     # Cycle through timeline and add values to count:
     # timeline = api.user_timeline(screen_name=twitter_handle, count=200)
